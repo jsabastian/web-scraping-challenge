@@ -9,7 +9,7 @@ mars = {}
 
 def init_browser():
     executable_path = {'executable_path':'chromedriver'}
-    return Browser('chrome', **executable_path, headless = True)
+    return Browser('chrome', **executable_path, headless = False)
 
 # main scraping function
 def scrape():
