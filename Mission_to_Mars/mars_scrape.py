@@ -7,23 +7,28 @@ import time
 
 mars = {} 
 
+def init_browser():
+    executable_path = {'executable_path':'chromedriver'}
+    return Browser('chrome', **executable_path, headless = True)
+
 # main scraping function
 def scrape():
-    browser = Browser("chrome", executable_path="chromedriver", headless=True)
-    news_title, news_teaser = mars_news(browser)
-    mars_news_data = {
+    browser = init_browser()
+    news_title, news_teaser = mars_news()
+    mars = {
         "news_title": news_title,
         "news_teaser": news_teaser,
-        "featured_img_url": featured_img(browser), 
+        "featured_img_url": featured_img(), 
         "mars_facts": facts(),
-        "hemisphere_img_urls": hemi_urls(browser),     
+        "hemisphere_img_urls": hemi_urls(),     
     }
     browser.quit()
 
-    return mars_news_data
+    return mars
 
 #1. NEWS SCRAPE
-def mars_news(browser):
+def mars_news():
+    browser = init_browser()
     browser.visit('https://mars.nasa.gov/news/')
     time.sleep(1)
     html = browser.html
@@ -34,7 +39,8 @@ def mars_news(browser):
     return news_title, news_teaser_body    
 
 #2. FEATURED IMG SCRAPE
-def featured_img(browser):
+def featured_img():
+    browser = init_browser()
     browser.visit('https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars')
     time.sleep(1)
     browser.find_by_id('full_image').click()
@@ -60,7 +66,8 @@ def facts():
     return facts_table
 
 #4. MARS HEMISPHERES
-def hemi_urls(browser):
+def hemi_urls():
+    browser = init_browser()
     browser.visit('https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars')
     time.sleep(1) 
     hemisphere_img_urls = []
